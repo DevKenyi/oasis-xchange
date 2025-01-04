@@ -1,0 +1,8 @@
+runtime: java11
+instance_class: F2  # This is a free tier instance. You can upgrade based on your needs.
+
+handlers:
+  - url: /.*
+    script: this field is not used but required
+    secure: always
+    redirect_http_response_code: 301

@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: oasis_xchanger
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  # Spring Boot Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "9092:9092"  # Updated to match server.port in application.yml
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/oasis_xchanger?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_USERNAME: lumitechcity@gmail.com
+      SPRING_MAIL_PASSWORD: tsvx lsuo arkz fbke
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE: true
+      SERVER_PORT: 9092
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_AUTHENTICATION: trace
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_AUTHORIZATION: debug
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+# Volumes for persistent data storage
+volumes:
+  mysql-data:
+
+# Networks for communication between containers
+networks:
+  app-network:
+    driver: bridge

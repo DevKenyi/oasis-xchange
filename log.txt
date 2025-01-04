@@ -1,0 +1,19 @@
+The last update to this application is 14th of November 2024
+Date and Time :14/11.2024
+User Action:
+User ID or Username:
+Page or Section:
+Request Method (HTTP):
+Response Status:
+IP Address:
+Error/Bug Description: "For now Customer entity is not working i would have to work on the desiriliztion of the enum"
+Error Code: Unauthoized
+Stack Trace:2024-11-14T20:05:39.078+01:00 DEBUG 9156 --- [nio-9092-exec-2] o.s.security.web.FilterChainProxy        : Secured POST /api/register/customer-registration
+            2024-11-14T20:05:39.621+01:00  WARN 9156 --- [nio-9092-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.HashSet<com.example.oasisxchange.model.Role>` from String value (token `JsonToken.VALUE_STRING`)]
+Action Outcome :
+Duration (for API calls):
+Source of Request:
+Additional Notes:
+
+*** return an http response for password missmatch
+*** save customer role in role database
