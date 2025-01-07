@@ -1,32 +1,29 @@
 version: '3.8'
 
 services:
-  # MySQL Database
   mysql:
     image: mysql:8.0
     container_name: mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"  # Mapping to avoid conflict with the existing MySQL instance
     environment:
-      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: oasis_xchanger
-      MYSQL_USER: root
       MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root  # Add this to set the root password for MySQL
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
       - app-network
 
-  # Spring Boot Application
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: app
     ports:
-      - "9092:9092"  # Updated to match server.port in application.yml
+      - "9091:9092"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/oasis_xchanger?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/oasis_xchanger?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
@@ -50,11 +47,9 @@ services:
     networks:
       - app-network
 
-# Volumes for persistent data storage
 volumes:
   mysql-data:
 
-# Networks for communication between containers
 networks:
   app-network:
     driver: bridge
